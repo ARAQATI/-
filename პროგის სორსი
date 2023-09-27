@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Timers;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        static void Main(string[] args)
+        {
+            IntPtr h = Process.GetCurrentProcess().MainWindowHandle;
+            ShowWindow(h, 0);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            System.Timers.Timer timer = new System.Timers.Timer(300000);
+            timer.Elapsed += timer_Elapsed;
+            timer.Start();
+            for (; ; )
+            {
+                // add a sleep for 100 mSec to reduce CPU usage
+                System.Threading.Thread.Sleep(100);
+            }
+
+        }
+        private static void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Cursor.Position = new Point(Cursor.Position.X + 1, Cursor.Position.Y + 1);
+        }
+    }
+}
